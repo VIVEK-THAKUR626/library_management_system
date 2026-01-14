@@ -3,6 +3,12 @@ const author = document.querySelector("#author");
 const addRecord = document.querySelector("#addRecord");
 const records = document.querySelector("#records");
 let id = Number(localStorage.getItem('id')) || 0;
+const recordArray = JSON.parse(localStorage.getItem('recordArray')) || [];
+
+function populateStorage(){
+	localStorage.setItem('id',id);
+	localStorage.setItem('recordArray',JSON.stringify(recordArray));
+}
 
 function buttons(){
 	const editButton = document.createElement('button');
@@ -31,9 +37,15 @@ function createRecord(bookTitle,author,genre){
 	edit.appendChild(buttonArray[0]);
 	Delete.appendChild(buttonArray[1]);
 
-	bookId.textContent = id;
+	bookId.textContent = id;	
+	recordArray.push({
+		'id':id,
+		'title':bookTitle.value.trim(),
+		'author':author.value.trim(),
+		'genre':genre.value
+	});
 	id++;
-	localStorage.setItem('id',id);
+	populateStorage();
 
 	const record = document.createElement('tr');
 	record.appendChild(bookId);
@@ -43,12 +55,30 @@ function createRecord(bookTitle,author,genre){
 	record.appendChild(edit);
 	record.appendChild(Delete);
 
-	return record;
+	return [record,...buttonArray,id-1];
 }
 
+function deleteRecord(deleteButton,record,bookId){
+	deleteButton.addEventListener('click',()=>{
+		records.removeChild(record);
+		for(let i=0; i<recordArray.length; i++){
+			if(recordArray[i].id == bookId){
+				recordArray.splice(i,1);
+				break;	
+			}
+		}	
+		populateStorage();
+	});
+}
 
 addRecord.addEventListener("click",(e)=>{
 	const genre = document.querySelector('input[name="genre"]:checked');
 	const record = createRecord(bookTitle,author,genre);
-	records.appendChild(record);
+	records.appendChild(record[0]);
+
+	const editButton = record[1];
+	const deleteButton = record[2];
+	const bookId = record[3];
+
+	deleteRecord(deleteButton,record[0],bookId);
 });
