@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>LIBRARY MANAGEMENT SYSTEM</h1>
+		<main>
+			<section class="input">
+				<form>
+					<label>Book title:</label>
+					<input type="text"id="bookTitle">
+					<br>
+
+					<label>Author:</label>
+					<input type="text"id="author">
+					<br>
+
+					<label>Genre:</label>
+					<br>
+					<input type="radio"id="scienceFiction" value="Science fiction" name="genre">
+					<label>Science fiction</label>
+					<br>
+					<input type="radio"id="fantasy" value="Fantasy" name="genre">
+					<label>Fantasy</label>
+					<br>	
+					<input type="radio"id="history" value="History" name="genre">
+					<label>History</label>
+					<br>
+					<input type="button" id="addRecord" value="Add record">
+				</form>
+			</section>
+			<section class="table">
+				<table border=1>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Title</th>
+							<th>Author</th>
+							<th>Genre</th>
+							<th>Edit record</th>
+							<th>Delete record</th>
+						</tr>
+					</thead>
+					<tbody id="records">
+						<tr id="empty">
+							<td colspan=6>NO BOOKS AVAILABLE</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		</main>
+		<script src="script.js"></script>
+	</body>
+</html>
