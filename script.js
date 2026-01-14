@@ -71,6 +71,76 @@ function deleteRecord(deleteButton,record,bookId){
 	});
 }
 
+function saveEditedRecord(editButton,deleteButton,saveButton,record,bookId,newTitleInput,newAuthorInput,newGenreInput){
+	saveButton.addEventListener('click',()=>{
+		const newTitle = newTitleInput.value.trim();
+		const newAuthor = newAuthorInput.value.trim();
+		const newGenre = newGenreInput.value;
+		const newArray = [newTitle,newAuthor,newGenre];
+
+		for(let i=1; i<4; i++){
+			record.children[i].firstChild.remove();
+			record.children[i].textContent = newArray[i-1];
+		}
+
+		for(let i=0; i<recordArray.length; i++){
+			if(recordArray[i].id == bookId){
+				recordArray[i] = {
+					'id': bookId,
+					'title': newTitle,
+					'author': newAuthor,
+					'genre': newGenre
+				}
+				break;
+			}
+		}
+		record.children[4].lastChild.remove();
+		editButton.disabled = false;
+		deleteButton.disabled = false;
+		populateStorage();
+	});
+}
+	
+
+function editRecord(editButton,deleteButton,record,bookId){
+	editButton.addEventListener('click',()=>{
+		const newTitleInput = document.createElement('input');
+		const newAuthorInput = document.createElement('input');
+		const newGenreInput = document.createElement('select');
+		const saveButton = document.createElement('button');
+		saveButton.textContent = "SAVE";
+
+		const scienceFiction = document.createElement('option');
+		const fantasy = document.createElement('option');
+		const history = document.createElement('option');
+
+		scienceFiction.value = "Science Fiction";
+		scienceFiction.textContent = "Science Fiction";
+		
+		fantasy.value = "Fantasy";
+		fantasy.textContent = "Fantasy";
+		
+		history.value = "History";
+		history.textContent = "History";
+
+		newGenreInput.appendChild(scienceFiction);
+		newGenreInput.appendChild(fantasy);
+		newGenreInput.appendChild(history);
+
+		record.children[1].textContent = "";
+		record.children[1].appendChild(newTitleInput);
+		record.children[2].textContent = "";
+		record.children[2].appendChild(newAuthorInput);
+		record.children[3].textContent = "";
+		record.children[3].appendChild(newGenreInput);
+		record.children[4].appendChild(saveButton);
+		
+		editButton.disabled = true;
+		deleteButton.disabled = true;
+		saveEditedRecord(editButton,deleteButton,saveButton,record,bookId,newTitleInput,newAuthorInput,newGenreInput);
+	});
+}
+
 addRecord.addEventListener("click",(e)=>{
 	const genre = document.querySelector('input[name="genre"]:checked');
 	const record = createRecord(bookTitle,author,genre);
@@ -81,4 +151,5 @@ addRecord.addEventListener("click",(e)=>{
 	const bookId = record[3];
 
 	deleteRecord(deleteButton,record[0],bookId);
+	editRecord(editButton,deleteButton,record[0],bookId);
 });
